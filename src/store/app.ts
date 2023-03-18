@@ -9,8 +9,19 @@ interface State {
   users: User[] | [];
 }
 
-export const useAppStore = defineStore("app", {
+export const usersStore = defineStore("app", {
   state: (): State => ({
     users: [],
   }),
+});
+
+export const drawerStore = defineStore("drawerState", {
+  state: () => ({
+    drawer: false,
+  }),
+  actions: {
+    toggleDrawer() {
+      this.drawer = !this.drawer;
+    },
+  },
 });

@@ -1,33 +1,23 @@
 <template>
-  <router-view />
-  <ul v-if="state.users">
-    <li v-for="user in state.users" :key="user.id">
-      {{ user.name }}
-    </li>
-  </ul>
+  <v-app :style="{ background: $vuetify.theme.themes.light.colors.gray }">
+    <mobile-menu app></mobile-menu>
+    <router-view />
+  </v-app>
 </template>
 
 <script lang="ts" setup>
-import { reactive, onMounted } from "vue";
+import { onMounted } from "vue";
+import { usersStore } from "./store/app";
 import axios from "axios";
+import MobileMenu from "./components/UI/MobileMenu.vue";
 
-type User = {
-  [key: string]: string;
-};
-
-interface State {
-  users: User[] | [];
-}
-
-const state: State = reactive({
-  users: [],
-});
+const store = usersStore();
 
 onMounted(() => {
   axios
     .get("http://localhost:3001/users")
     .then((res) => {
-      state.users = res.data;
+      store.users = res.data;
       console.log(res.data);
     })
     .catch((err) => console.log(err));
