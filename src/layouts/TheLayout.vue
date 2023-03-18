@@ -1,7 +1,7 @@
 <template>
-  <v-main>
-    <the-navbar></the-navbar>
+  <the-navbar></the-navbar>
 
+  <v-main class="d-flex flex-column align-center my-16">
     <slot></slot>
   </v-main>
 </template>

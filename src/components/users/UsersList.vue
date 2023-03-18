@@ -1,5 +1,5 @@
 <template>
-  <main class="d-flex">
+  <section class="d-flex flex-column flex-sm-row flex-wrap justify-sm-center">
     <user-card
       v-for="user in store.users"
       :key="user.id"
@@ -7,7 +7,7 @@
       :id="user.id"
       :email="user.email"
     ></user-card>
-  </main>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -16,3 +16,5 @@ import UserCard from "./UserCard.vue";
 
 const store = usersStore();
 </script>
+
+<style scoped></style>

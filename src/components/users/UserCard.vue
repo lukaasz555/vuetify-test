@@ -4,8 +4,9 @@
     :subtitle="email"
     :width="260"
     text="Short description is here..."
+    class="mx-4 my-2 px-2 py-3"
   >
-    <v-card-actions>
+    <v-card-actions class="d-flex justify-end">
       <v-btn
         size="small"
         variant="tonal"
@@ -28,10 +29,3 @@ import { toRefs } from "vue";
 const props = defineProps(["name", "id", "email"]);
 const { name, email } = toRefs(props);
 </script>
-
-<style scoped>
-.v-card {
-  margin: 1em;
-  padding: 1em 2em;
-}
-</style>
