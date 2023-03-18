@@ -1,8 +1,16 @@
 // Utilities
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useAppStore = defineStore('app', {
-  state: () => ({
-    //
+type User = {
+  [key: string]: string;
+};
+
+interface State {
+  users: User[] | [];
+}
+
+export const useAppStore = defineStore("app", {
+  state: (): State => ({
+    users: [],
   }),
-})
+});
