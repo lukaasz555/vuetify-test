@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="300" class="py-8 px-4" :rounded="4">
+  <v-card :width="300" class="pt-8 px-4" :rounded="4">
     <v-form @submit.prevent>
       <v-text-field
         label="Name"
@@ -27,6 +27,12 @@
           >clear form</v-btn
         >
       </v-card-actions>
+      <v-card-text v-if="state.success" class="text-success text-center mb-2">
+        Added user
+      </v-card-text>
+      <v-card-text v-else class="text-red text-error mb-2">
+        {{ state.errorMessage }}
+      </v-card-text>
     </v-form>
   </v-card>
 </template>
@@ -43,6 +49,8 @@ const state = reactive({
     email: "",
   },
   isLoading: false,
+  errorMessage: "",
+  success: false,
 });
 
 const handleReset = () => {
@@ -50,6 +58,7 @@ const handleReset = () => {
     name: "",
     email: "",
   };
+  state.errorMessage = "";
 };
 
 const handleAdd = () => {
@@ -58,12 +67,23 @@ const handleAdd = () => {
     state.isLoading = true;
     axios
       .post("http://localhost:3001/users", state.newUser)
-      .then((res) => res.status === 201 && store.fetchUsers())
-      .catch((err) => (state.isLoading = false))
+      .then((res) => {
+        if (res.status === 201) {
+          state.success = true;
+          handleReset();
+          store.fetchUsers();
+        }
+      })
+      .catch(
+        (err) =>
+          (state.errorMessage = `Sth went wrong.
+      Please, try again.`)
+      )
       .finally(() => {
         state.isLoading = false;
-        handleReset();
       });
+  } else {
+    state.errorMessage = "You must fill the inputs";
   }
 };
 </script>
