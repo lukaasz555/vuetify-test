@@ -20,4 +20,10 @@ const router = createRouter({
   routes,
 });
 
+router.addRoute("users", {
+  path: "/users/:id",
+  name: "User",
+  component: () => import("../views/TheUser.vue"),
+});
+
 export default router;

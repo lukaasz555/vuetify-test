@@ -11,7 +11,8 @@
         size="small"
         variant="tonal"
         :style="{ color: $vuetify.theme.themes.light.colors.blue }"
-        >Do sth</v-btn
+        :href="'http://localhost:3000/users/' + id"
+        >page</v-btn
       >
       <v-btn
         size="small"

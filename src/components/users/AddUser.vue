@@ -75,9 +75,8 @@ const handleAdd = () => {
         }
       })
       .catch(
-        (err) =>
-          (state.errorMessage = `Sth went wrong.
-      Please, try again.`)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (err) => (state.errorMessage = `Sth went wrong. Please, try again.`)
       )
       .finally(() => {
         state.isLoading = false;
