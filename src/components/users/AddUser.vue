@@ -105,7 +105,7 @@ const handleEmailChange = (e: Event) => (state.newUser.email = e.toString());
 const handleCountryChange = (e: Event) =>
   (state.newUser.country = e.toString());
 const handleDateChange = (e: Event) => {
-  state.newUser.startDate = new Date(e);
+  state.newUser.startDate = new Date(e.toString());
 };
 </script>
 
