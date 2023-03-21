@@ -16,6 +16,11 @@
         :value="state.newUser.country"
         @handleSelectChange="handleCountryChange"
       ></the-select>
+      <date-input
+        :value="state.newUser.startDate"
+        label="Start date:"
+        @handleInputChange="handleDateChange"
+      ></date-input>
       <v-card-actions class="d-flex justify-space-between">
         <v-btn
           @click="handleAdd"
@@ -44,6 +49,7 @@ import { usersStore } from "@/store/app";
 import axios from "axios";
 import TheInput from "../UI/TheInput.vue";
 import TheSelect from "../UI/TheSelect.vue";
+import DateInput from "../UI/DateInput.vue";
 
 const store = usersStore();
 const state = reactive({
@@ -51,6 +57,7 @@ const state = reactive({
     name: "",
     email: "",
     country: "",
+    startDate: new Date(),
   },
   isLoading: false,
   errorMessage: "",
@@ -62,6 +69,7 @@ const handleReset = () => {
     name: "",
     email: "",
     country: "",
+    startDate: new Date(),
   };
   state.errorMessage = "";
 };
@@ -94,9 +102,10 @@ const handleAdd = () => {
 //
 const handleNameChange = (e: Event) => (state.newUser.name = e.toString());
 const handleEmailChange = (e: Event) => (state.newUser.email = e.toString());
-const handleCountryChange = (e: Event) => {
-  console.log("e: " + e);
-  state.newUser.country = e.toString();
+const handleCountryChange = (e: Event) =>
+  (state.newUser.country = e.toString());
+const handleDateChange = (e: Event) => {
+  state.newUser.startDate = new Date(e);
 };
 </script>
 
