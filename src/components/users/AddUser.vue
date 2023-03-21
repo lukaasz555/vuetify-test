@@ -1,20 +1,21 @@
 <template>
   <v-card :width="300" class="pt-8 px-4" :rounded="4">
     <v-form @submit.prevent>
-      <v-text-field
+      <the-input
         label="Name"
-        v-model="state.newUser.name"
-        variant="outlined"
-        density="compact"
-      >
-      </v-text-field>
-      <v-text-field
+        :value="state.newUser.name"
+        @handleInputChange="handleNameChange"
+      ></the-input>
+      <the-input
         label="E-mail"
-        v-model="state.newUser.email"
-        variant="outlined"
-        density="compact"
-      >
-      </v-text-field>
+        :value="state.newUser.email"
+        @handleInputChange="handleEmailChange"
+      ></the-input>
+      <the-select
+        :items="['PL', 'UK', 'ESP']"
+        :value="state.newUser.country"
+        @handleSelectChange="handleCountryChange"
+      ></the-select>
       <v-card-actions class="d-flex justify-space-between">
         <v-btn
           @click="handleAdd"
@@ -41,12 +42,15 @@
 import { reactive } from "vue";
 import { usersStore } from "@/store/app";
 import axios from "axios";
+import TheInput from "../UI/TheInput.vue";
+import TheSelect from "../UI/TheSelect.vue";
 
 const store = usersStore();
 const state = reactive({
   newUser: {
     name: "",
     email: "",
+    country: "",
   },
   isLoading: false,
   errorMessage: "",
@@ -57,6 +61,7 @@ const handleReset = () => {
   state.newUser = {
     name: "",
     email: "",
+    country: "",
   };
   state.errorMessage = "";
 };
@@ -84,6 +89,14 @@ const handleAdd = () => {
   } else {
     state.errorMessage = "You must fill the inputs";
   }
+};
+
+//
+const handleNameChange = (e: Event) => (state.newUser.name = e.toString());
+const handleEmailChange = (e: Event) => (state.newUser.email = e.toString());
+const handleCountryChange = (e: Event) => {
+  console.log("e: " + e);
+  state.newUser.country = e.toString();
 };
 </script>
 
