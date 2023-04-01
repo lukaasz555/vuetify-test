@@ -1,40 +1,59 @@
 <template>
   <section class="d-flex flex-column flex-sm-row flex-wrap justify-sm-center">
     <user-card
-      v-for="user in store.users"
+      v-for="user in usersStore.users"
       :key="user.id"
       :name="user.name"
       :id="user.id"
       :email="user.email"
     ></user-card>
   </section>
-  <v-pagination
-    v-model="currentPage"
-    :length="totalPages"
-    color="blue"
-    @next="handlePageChange"
-  ></v-pagination>
+  <div>
+    <v-select
+      v-model="searchStore.$state.itemsPerPage"
+      :items="pageSizes"
+      @update:model-value="handleItemsPerPageChange"
+    >
+    </v-select>
+    <v-pagination
+      v-model="searchStore.$state.currentPage"
+      :length="totalPages"
+      color="blue"
+      @update:model-value="handlePageChange"
+    ></v-pagination>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { usersStore } from "@/store/app";
-import { ref } from "vue";
+import { useSearchStore } from "@/store/searchStore";
+import { useUsersStore } from "@/store/usersStore";
 import UserCard from "./UserCard.vue";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 
-const store = usersStore();
-let itemsPerPage = ref<number>(2);
-let currentPage = ref<number>(1);
-let totalPages = ref<number>(2);
+const usersStore = useUsersStore();
+const searchStore = useSearchStore();
+
+const pageSizes = [4, 8, 12];
 
 onMounted(() => {
-  store.fetchUsers();
+  // console.log(searchStore.$state);
+  usersStore.fetchUsers(searchStore.$state);
 });
 
-const handlePageChange = (val: number) => {
-  console.log(val);
-  currentPage.value = val;
-};
+const totalPages = computed(() => {
+  const res = Math.ceil(searchStore.totalRecords / searchStore.itemsPerPage);
+  console.log(res);
+  return res;
+});
+
+function handlePageChange(v: number): void {
+  searchStore.$state.currentPage = v;
+}
+
+function handleItemsPerPageChange(v: number): void {
+  searchStore.setItemsPerPage(v);
+  usersStore.fetchUsers(searchStore.$state);
+}
 </script>
 
 <style scoped></style>

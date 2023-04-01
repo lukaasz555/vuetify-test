@@ -40,11 +40,13 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { usersStore } from "@/store/app";
+import { useSearchStore } from "@/store/searchStore";
+import { useUsersStore } from "@/store/usersStore";
 import TheInput from "../UI/TheInput.vue";
 import TheSelect from "../UI/TheSelect.vue";
 
-const store = usersStore();
+const usersStore = useUsersStore();
+const searchStore = useSearchStore();
 
 const state = reactive({
   isLoading: false,
@@ -71,14 +73,14 @@ const handleAdd = () => {
   const { name, email } = newUser.value;
   if (name.trim() !== "" && email.trim() !== "") {
     state.isLoading = true;
-    store
+    usersStore
       .addUser(newUser.value)
       .then((res) => {
         if (res.status === 201) {
           setTimeout(() => {
             state.success = true;
             handleReset();
-            store.fetchUsers();
+            usersStore.fetchUsers(searchStore.$state);
           }, 2000);
         }
       })

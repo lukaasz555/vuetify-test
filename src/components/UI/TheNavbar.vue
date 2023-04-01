@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { routes } from "../../router/index";
-import { drawerStore } from "@/store/app";
+import { useDrawerStore } from "@/store/drawerStore";
 
-const state = drawerStore();
+const state = useDrawerStore();
 </script>

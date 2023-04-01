@@ -10,13 +10,16 @@
 <script setup lang="ts">
 import { reactive, computed, onMounted } from "vue";
 import TheLayout from "@/layouts/TheLayout.vue";
-import { usersStore } from "@/store/app";
+import { useSearchStore } from "@/store/searchStore";
+import { useUsersStore } from "@/store/usersStore";
 import AddUser from "@/components/users/AddUser.vue";
 import UsersList from "@/components/users/UsersList.vue";
 
-const store = usersStore();
+const usersStore = useUsersStore();
+const searchStore = useSearchStore();
+
 onMounted(() => {
-  store.fetchUsers();
+  usersStore.fetchUsers(searchStore.$state);
 });
 
 const state = reactive({

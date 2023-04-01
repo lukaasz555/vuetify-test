@@ -4,9 +4,15 @@ type User = {
   [key: string]: string;
 };
 
+export interface Params {
+  itemsPerPage: number;
+  currentPage: number;
+  totalRecords: number;
+}
+
 class UsersService {
-  fetchAll() {
-    return http.get("/users");
+  fetchAll(params: Params) {
+    return http.get("/users", { params });
   }
   addUser(user: User) {
     return http.post("/users", user);

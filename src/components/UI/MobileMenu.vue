@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 import { routes } from "@/router";
-import { drawerStore } from "@/store/app";
+import { useDrawerStore } from "@/store/drawerStore";
 
-const store = drawerStore();
+const store = useDrawerStore();
 
 const onResize = () => {
   if (window.innerWidth > 900) {
