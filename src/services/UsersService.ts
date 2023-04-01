@@ -1,4 +1,5 @@
 import http from "../http-common";
+import { setURLFromQuery } from "@/helpers/query";
 
 type User = {
   [key: string]: string;
@@ -12,6 +13,7 @@ export interface Params {
 
 class UsersService {
   fetchAll(params: Params) {
+    setURLFromQuery();
     return http.get("/users", {
       params: {
         _page: params.currentPage,
