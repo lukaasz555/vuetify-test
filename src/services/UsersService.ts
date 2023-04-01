@@ -12,7 +12,12 @@ export interface Params {
 
 class UsersService {
   fetchAll(params: Params) {
-    return http.get("/users", { params });
+    return http.get("/users", {
+      params: {
+        _page: params.currentPage,
+        _limit: params.itemsPerPage,
+      },
+    });
   }
   addUser(user: User) {
     return http.post("/users", user);

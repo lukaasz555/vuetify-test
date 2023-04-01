@@ -22,9 +22,14 @@ export const useUsersStore = defineStore("usersStore", {
   state: baseUsersState,
   actions: {
     async fetchUsers(params: Params): Promise<void> {
-      const result = await UsersService.fetchAll(params);
-      this.users = await result.data;
-      searchStore.$state.totalRecords = this.users.length;
+      UsersService.fetchAll(params)
+        .then((res) => {
+          this.users = res.data;
+          searchStore.$state.totalRecords = parseInt(
+            res.headers["x-total-count"]
+          );
+        })
+        .catch((e: Error) => console.log(e));
     },
     async addUser(user: User): Promise<AxiosResponse> {
       return UsersService.addUser(user);
