@@ -1,6 +1,6 @@
-// Utilities
 import { defineStore } from "pinia";
 import UsersService from "../services/UsersService";
+import { AxiosResponse } from "axios";
 
 type User = {
   [key: string]: string;
@@ -17,12 +17,12 @@ const baseState = (): UsersState => ({
 export const usersStore = defineStore("users", {
   state: baseState,
   actions: {
-    async fetchUsers() {
+    async fetchUsers(): Promise<void> {
       const result = await UsersService.fetchAll();
       this.users = await result.data;
     },
-    addUser(newUser: User) {
-      //this.users.unshift(newUser);
+    async addUser(user: User): Promise<AxiosResponse> {
+      return UsersService.addUser(user);
     },
   },
 });

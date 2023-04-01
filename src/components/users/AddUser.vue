@@ -16,11 +16,6 @@
         :value="newUser.country"
         @handleSelectChange="handleCountryChange"
       ></the-select>
-      <!-- <date-input
-        :value="state.newUser.startDate"
-        label="Start date:"
-        @handleInputChange="handleDateChange"
-      ></date-input> -->
       <v-card-actions class="d-flex justify-space-between">
         <v-btn
           @click="handleAdd"
@@ -48,8 +43,6 @@ import { reactive, ref } from "vue";
 import { usersStore } from "@/store/app";
 import TheInput from "../UI/TheInput.vue";
 import TheSelect from "../UI/TheSelect.vue";
-// import DateInput from "../UI/DateInput.vue";
-import UsersService from "@/services/UsersService";
 
 const store = usersStore();
 
@@ -78,43 +71,32 @@ const handleAdd = () => {
   const { name, email } = newUser.value;
   if (name.trim() !== "" && email.trim() !== "") {
     state.isLoading = true;
-    UsersService.addUser(newUser.value)
+    store
+      .addUser(newUser.value)
       .then((res) => {
         if (res.status === 201) {
-          state.success = true;
-          handleReset();
-          store.fetchUsers();
+          setTimeout(() => {
+            state.success = true;
+            handleReset();
+            store.fetchUsers();
+          }, 2000);
         }
       })
-      .catch((e) => console.log(e));
-    // axios
-    //   .post("http://localhost:3001/users", state.newUser)
-    //   .then((res) => {
-    //     if (res.status === 201) {
-    //       state.success = true;
-    //       handleReset();
-    //       store.fetchUsers();
-    //     }
-    //   })
-    //   .catch(
-    //     (err) => (state.errorMessage = `Sth went wrong. Please, try again.`)
-    //   )
-    //   .finally(() => {
-    //     state.isLoading = false;
-    //   });
+      .catch((e: Error) => {
+        setTimeout(() => {
+          state.errorMessage = "Something went wrong";
+          state.isLoading = false;
+        }, 3000);
+      });
   } else {
     state.errorMessage = "You must fill the inputs";
   }
 };
 
-//
 const handleNameChange = (e: Event) => (newUser.value.name = e.toString());
 const handleEmailChange = (e: Event) => (newUser.value.email = e.toString());
 const handleCountryChange = (e: Event) =>
   (newUser.value.country = e.toString());
-// const handleDateChange = (e: Event) => {
-//   state.newUser.startDate = new Date(e.toString());
-// };
 </script>
 
 <style scoped></style>

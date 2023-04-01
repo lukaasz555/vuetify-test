@@ -6,7 +6,6 @@ type User = {
 
 class UsersService {
   fetchAll() {
-    console.log("fetch all UsersService");
     return http.get("/users");
   }
   addUser(user: User) {
