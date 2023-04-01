@@ -3,24 +3,24 @@
     <v-form @submit.prevent>
       <the-input
         label="Name"
-        :value="state.newUser.name"
+        :value="newUser.name"
         @handleInputChange="handleNameChange"
       ></the-input>
       <the-input
         label="E-mail"
-        :value="state.newUser.email"
+        :value="newUser.email"
         @handleInputChange="handleEmailChange"
       ></the-input>
       <the-select
         :items="['PL', 'UK', 'ESP']"
-        :value="state.newUser.country"
+        :value="newUser.country"
         @handleSelectChange="handleCountryChange"
       ></the-select>
-      <date-input
+      <!-- <date-input
         :value="state.newUser.startDate"
         label="Start date:"
         @handleInputChange="handleDateChange"
-      ></date-input>
+      ></date-input> -->
       <v-card-actions class="d-flex justify-space-between">
         <v-btn
           @click="handleAdd"
@@ -44,42 +44,41 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { usersStore } from "@/store/app";
-import axios from "axios";
 import TheInput from "../UI/TheInput.vue";
 import TheSelect from "../UI/TheSelect.vue";
-import DateInput from "../UI/DateInput.vue";
+// import DateInput from "../UI/DateInput.vue";
+import UsersService from "@/services/UsersService";
 
 const store = usersStore();
+
 const state = reactive({
-  newUser: {
-    name: "",
-    email: "",
-    country: "",
-    startDate: new Date(),
-  },
   isLoading: false,
   errorMessage: "",
   success: false,
 });
 
+const newUser = ref({
+  name: "",
+  email: "",
+  country: "",
+});
+
 const handleReset = () => {
-  state.newUser = {
+  newUser.value = {
     name: "",
     email: "",
     country: "",
-    startDate: new Date(),
   };
   state.errorMessage = "";
 };
 
 const handleAdd = () => {
-  const { name, email } = state.newUser;
+  const { name, email } = newUser.value;
   if (name.trim() !== "" && email.trim() !== "") {
     state.isLoading = true;
-    axios
-      .post("http://localhost:3001/users", state.newUser)
+    UsersService.addUser(newUser.value)
       .then((res) => {
         if (res.status === 201) {
           state.success = true;
@@ -87,26 +86,35 @@ const handleAdd = () => {
           store.fetchUsers();
         }
       })
-      .catch(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (err) => (state.errorMessage = `Sth went wrong. Please, try again.`)
-      )
-      .finally(() => {
-        state.isLoading = false;
-      });
+      .catch((e) => console.log(e));
+    // axios
+    //   .post("http://localhost:3001/users", state.newUser)
+    //   .then((res) => {
+    //     if (res.status === 201) {
+    //       state.success = true;
+    //       handleReset();
+    //       store.fetchUsers();
+    //     }
+    //   })
+    //   .catch(
+    //     (err) => (state.errorMessage = `Sth went wrong. Please, try again.`)
+    //   )
+    //   .finally(() => {
+    //     state.isLoading = false;
+    //   });
   } else {
     state.errorMessage = "You must fill the inputs";
   }
 };
 
 //
-const handleNameChange = (e: Event) => (state.newUser.name = e.toString());
-const handleEmailChange = (e: Event) => (state.newUser.email = e.toString());
+const handleNameChange = (e: Event) => (newUser.value.name = e.toString());
+const handleEmailChange = (e: Event) => (newUser.value.email = e.toString());
 const handleCountryChange = (e: Event) =>
-  (state.newUser.country = e.toString());
-const handleDateChange = (e: Event) => {
-  state.newUser.startDate = new Date(e.toString());
-};
+  (newUser.value.country = e.toString());
+// const handleDateChange = (e: Event) => {
+//   state.newUser.startDate = new Date(e.toString());
+// };
 </script>
 
 <style scoped></style>

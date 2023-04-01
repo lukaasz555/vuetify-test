@@ -15,7 +15,9 @@ import AddUser from "@/components/users/AddUser.vue";
 import UsersList from "@/components/users/UsersList.vue";
 
 const store = usersStore();
-onMounted(() => store.fetchUsers());
+onMounted(() => {
+  store.fetchUsers();
+});
 
 const state = reactive({
   currentView: "list",
